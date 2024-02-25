@@ -8,7 +8,7 @@ namespace API.Controllers
         public IResult SelectWeights(int userID)
         {
             Weight[]? result = null;
-            using (KcalPlannerDbContext db = new KcalPlannerDbContext())
+            using (var db = new KcalPlannerDbContext())
             {
                 result = db.Weights.Where(x => x.IdUser == userID).ToArray();
             }
@@ -19,7 +19,7 @@ namespace API.Controllers
         public IResult SelectUserProducts(int userID)
         {
             UserProduct[]? result = null;
-            using (KcalPlannerDbContext db = new KcalPlannerDbContext())
+            using (var db = new KcalPlannerDbContext())
             {
                 result = db.UserProducts.Where(x => x.IdUser == userID).ToArray();
             }
@@ -46,7 +46,7 @@ namespace API.Controllers
         //Добавление цели
         public IResult AddAim(Aim newAim)
         {
-            using (KcalPlannerDbContext db = new KcalPlannerDbContext())
+            using (var db = new KcalPlannerDbContext())
             {
                 Aim? aim = db.Aims.FirstOrDefault(p => p.Name == newAim.Name);
                 if (aim == null)
@@ -62,10 +62,49 @@ namespace API.Controllers
             }
         }
 
+        //Удаление цели
+        public IResult RemoveAim(Aim targetAim)
+        {
+            using (var db = new KcalPlannerDbContext())
+            {
+                Aim? aim = db.Aims.FirstOrDefault(p => p.Name == targetAim.Name);
+                if (aim != null)
+                {
+                    db.Aims.Remove(aim);
+                    db.SaveChanges();
+                    return Results.Json(aim);
+                }
+                else
+                {
+                    return Results.NotFound(new { message = "Цель не существует" });
+                }
+            }
+        }
+
+        //Редактирование цели
+        public IResult UpdateAim(Aim targetAim, string newName)
+        {
+            using (var db = new KcalPlannerDbContext())
+            {
+                Aim? aim = db.Aims.FirstOrDefault(p => p.Name == targetAim.Name);
+                if (aim != null)
+                {
+                    aim.Name = newName;
+                    db.SaveChanges();
+                    return Results.Json(aim);
+                }
+                else
+                {
+                    return Results.NotFound(new { message = "Цель не существует" });
+                }
+            }
+        }
+
+
         //Добавление активности
         public IResult AddActivity(Activity newAct)
         {
-            using (KcalPlannerDbContext db = new KcalPlannerDbContext())
+            using (var db = new KcalPlannerDbContext())
             {
                 Activity? act = db.Activities.FirstOrDefault(p => p.Name == newAct.Name);
                 if (act == null)

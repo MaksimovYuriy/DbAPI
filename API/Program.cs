@@ -22,4 +22,8 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+DBController dbc = new DBController();
+Aim target = new Aim() { Name = "Сохранять вес" };
+dbc.UpdateAim(target, "Сохранить вес");
+
 app.Run();
