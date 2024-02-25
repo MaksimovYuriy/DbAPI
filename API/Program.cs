@@ -22,10 +22,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-DBController dBController = new DBController();
-Aim newAim1 = new Aim() { Name = "Набрать вес" };
-Aim newAim2 = new Aim() { Name = "Сохранять вес" };
-dBController.AddAim(newAim1);
-dBController.AddAim(newAim2);
-
 app.Run();

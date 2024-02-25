@@ -61,5 +61,24 @@ namespace API.Controllers
                 }
             }
         }
+
+        //Добавление активности
+        public IResult AddActivity(Activity newAct)
+        {
+            using (KcalPlannerDbContext db = new KcalPlannerDbContext())
+            {
+                Activity? act = db.Activities.FirstOrDefault(p => p.Name == newAct.Name);
+                if (act == null)
+                {
+                    db.Activities.Add(newAct);
+                    db.SaveChanges();
+                    return Results.Json(newAct);
+                }
+                else
+                {
+                    return Results.NotFound(new { message = "Цель уже существует" });
+                }
+            }
+        }
     }
 }
