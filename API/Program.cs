@@ -23,7 +23,14 @@ app.UseAuthorization();
 app.MapControllers();
 
 DBController dbc = new DBController();
-Aim target = new Aim() { Name = "Сохранять вес" };
-dbc.UpdateAim(target, "Сохранить вес");
+Request req = new Request()
+{
+    Name = "Куриное филе",
+    Kcal = 113,
+    Proteins = 24,
+    Fats = 2,
+    Carbohydrates = 0
+};
+dbc.AddRequest(req);
 
 app.Run();

@@ -119,5 +119,62 @@ namespace API.Controllers
                 }
             }
         }
+
+        //Удаление активности
+        public IResult RemoveAct(Activity targetAct)
+        {
+            using (var db = new KcalPlannerDbContext())
+            {
+                Activity? act = db.Activities.FirstOrDefault(p => p.Name == targetAct.Name);
+                if (act != null)
+                {
+                    db.Activities.Remove(act);
+                    db.SaveChanges();
+                    return Results.Json(act);
+                }
+                else
+                {
+                    return Results.NotFound(new { message = "Активность не существует" });
+                }
+            }
+        }
+
+        //Редактирование активности
+        public IResult UpdateAсt(Activity targetAct, string newName)
+        {
+            using (var db = new KcalPlannerDbContext())
+            {
+                Activity? act = db.Activities.FirstOrDefault(p => p.Name == targetAct.Name);
+                if (act != null)
+                {
+                    act.Name = newName;
+                    db.SaveChanges();
+                    return Results.Json(act);
+                }
+                else
+                {
+                    return Results.NotFound(new { message = "Цель не существует" });
+                }
+            }
+        }
+
+        //Добавление заявки
+        public IResult AddRequest(Request newReq)
+        {
+            using (var db = new KcalPlannerDbContext())
+            {
+                Request? req = db.Requests.FirstOrDefault(p => p.Equals(newReq));
+                if(req == null)
+                {
+                    db.Requests.Add(newReq);
+                    db.SaveChanges();
+                    return Results.Json(newReq);
+                }
+                else
+                {
+                    return Results.NotFound(new { message = "Такой запрос уже существует" });
+                }
+            }
+        }
     }
 }
